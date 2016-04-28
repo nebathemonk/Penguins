@@ -21,7 +21,7 @@ public class CharacterMove : MonoBehaviour {
 	public int health;
 
 	public GameObject bulletType;
-	public Text healthText; 
+	public Slider healthSlider; 
 	bool hasBullet;
 
 	bool facingRight;
@@ -47,9 +47,11 @@ public class CharacterMove : MonoBehaviour {
 		dead = false;
 
 		if (playerTwo) {
-			healthText = GameObject.Find ("PlayertwoHealth").GetComponent<Text>();
+			healthSlider = GameObject.Find ("PlayerTwoHealth").GetComponent<Slider>();
+            healthSlider.maxValue = health;
 		} else {
-			healthText = GameObject.Find ("PlayeroneHealth").GetComponent<Text>();
+			healthSlider = GameObject.Find ("PlayerOneHealth").GetComponent<Slider>();
+            healthSlider.maxValue = health;
 		}
 
 	}
@@ -70,8 +72,8 @@ public class CharacterMove : MonoBehaviour {
 			anim.SetBool("Jumping", jumping);
 			anim.SetBool("Flapped", flapped);
 			//healthbar movement
-			healthText.text = health.ToString();
-			healthText.transform.position = new Vector2 (transform.position.x, transform.position.y + 1f);  
+			healthSlider.value = health;
+			healthSlider.transform.position = new Vector2 (transform.position.x, transform.position.y + 1f);  
 
 
 			if (facingRight)
@@ -239,8 +241,36 @@ public class CharacterMove : MonoBehaviour {
 	{
 		Debug.Log(this.gameObject.name + " died.");
 		dead = true;
+        if (hasBullet)
+        {
+            //drop the bullet if we're dying
+            bulletType.GetComponent<Snowball>().Throw(facingRight, 1);
+        }
 	}
 
+    //using triggers to stop the player from double jumping
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Floor" && !dead)
+        {
+            jumping = false;
+            flapped = false;
+            sliding = false;
+            standing = true;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Floor" && !dead)
+        {
+            standing = true;
+            flapped = false;
+            jumping = false;
+        }
+    }
+
+    /*
 	void OnCollisionEnter2D(Collision2D other)
 	{
 		//hit the ground, stop jumping
@@ -262,7 +292,7 @@ public class CharacterMove : MonoBehaviour {
 			flapped = false;
 			jumping = false;
 		}
-	}
+	}*/
 }
 
 

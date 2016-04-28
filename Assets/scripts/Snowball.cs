@@ -10,6 +10,7 @@ public class Snowball : MonoBehaviour {
     bool thrown;
 
     Rigidbody2D body;
+    SpriteRenderer sprite;
 
     //this is the player that is carrying the snowball right now
     GameObject carrier;
@@ -18,6 +19,7 @@ public class Snowball : MonoBehaviour {
 	void Start () {
 
         body = gameObject.GetComponent<Rigidbody2D>();
+        sprite = gameObject.GetComponent<SpriteRenderer>();
         active = false;
 	}
 	
@@ -35,6 +37,15 @@ public class Snowball : MonoBehaviour {
             body.AddForce(new Vector2(distanceToPlayerX,distanceToPlayerY));
             */
         }
+
+        //I put this in here for beta testing so we can watch the snowball be active
+        if (active)
+        {
+            sprite.color = Color.red;
+        }
+        else{
+            sprite.color = Color.white;
+        }
 	
 	}
 
@@ -43,11 +54,11 @@ public class Snowball : MonoBehaviour {
         //get thrown by the player
         if (throwRight)
         {
-            body.AddForce(new Vector2(newVelocity,0),ForceMode2D.Impulse);
+            body.AddForce(new Vector2(newVelocity * 10,0),ForceMode2D.Impulse);
         }
         else
         {
-            body.AddForce(new Vector2(-1 * newVelocity,0),ForceMode2D.Impulse);
+            body.AddForce(new Vector2(-1 * newVelocity * 10,0),ForceMode2D.Impulse);
         }
         gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
         active = true;
