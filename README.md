@@ -13,7 +13,6 @@ Known bugs of Master Branch:
 To Do List:
   Health bars above players heads
   Change snowball throwing process
-  
- 
+  Finish this Readme, update the Update History part.
 
 Update History:
